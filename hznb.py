@@ -14,6 +14,10 @@ def jetdisplay():
 	#for geant4.10.5
 	inputfiles = ["resultsgeant4.10.5/jetscan_leakage/hznb/hznb.root"]
 	#end of geant4.10.5
+
+	#for geant4.10.5 FTFPBERT
+	inputfiles = ["results_FTFPBERT/noBnoX0/2j/hznb.root"]
+	#end geant4.10.5 FTFPBERT
 	
 	for counter, inputfile in enumerate(inputfiles):
 		inputfile = TFile(inputfile)
@@ -77,12 +81,14 @@ def jetdisplay():
 			j2r_eta = tree.j2r_eta
 			j2r_phi = tree.j2r_phi	
 
-			deltaj1 = 0.04406*j1r_E+0.1158
-			deltaj1 = 0.04135*j1r_E+0.08789
+			#deltaj1 = 0.04406*j1r_E+0.1158
+			#deltaj1 = 0.04135*j1r_E+0.08789
+			deltaj1 = 0.07113*j1r_E+0.5201
 			j1 = TLorentzVector()
 			j1.SetPtEtaPhiE(j1r_pt+deltaj1*np.sin(j1r_theta), j1r_eta, j1r_phi, j1r_E+deltaj1)
-			deltaj2 = 0.04406*j2r_E+0.1158
-			deltaj2 = 0.04135*j2r_E+0.08789
+			#deltaj2 = 0.04406*j2r_E+0.1158
+			#deltaj2 = 0.04135*j2r_E+0.08789
+			deltaj2 = 0.07113*j2r_E+0.5201
 			j2 = TLorentzVector()
 			j2.SetPtEtaPhiE(j2r_pt+deltaj2*np.sin(j2r_theta), j2r_eta, j2r_phi, j2r_E+deltaj2)
 			newmass = (j1+j2).M()
