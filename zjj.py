@@ -24,6 +24,10 @@ def jetdisplay():
 	#inputfiles = ["/home/software/Calo/CaloLoop/CaloJet/resultsgeant4.10.5/jetscan_leakage_B/jetscan/jetscan"+str(e)+".root" for e in energies]
 	#end CaloLoop
 
+	#for geant4.10.5.p01 FTFPBERT
+	inputfiles = ["results_FTFPBERT/noBnoX0/jetscan/jetscan_"+str(e)+".root" for e in energies]
+	#end geant4.10.5.p01 FTFPBERT
+
 	for counter, inputfile in enumerate(inputfiles):
 		inputfile = TFile(inputfile)
 		print "Analyzing: "+str(inputfile)+" \n"
@@ -127,12 +131,14 @@ def jetdisplay():
 			#cut5 = abs(j1t_E-j2t_E)<5.
 			cut5 = abs(j1t_phi-j2t_phi)>0.1
 			if cut1 and cut2 and cut3 and cut4 and cut5:
-				deltaj1 = 0.04406*j1r_E+0.1158
-				deltaj2 = 0.04406*j2r_E+0.1158
-				deltaj1 = 0.02825*j1r_E+0.4056
-				deltaj2 = 0.02825*j2r_E+0.4056 
-				deltaj1 = 0.04135*j1r_E+0.08789
-				deltaj2 = 0.04135*j2r_E+0.08789
+				#deltaj1 = 0.04406*j1r_E+0.1158
+				#deltaj2 = 0.04406*j2r_E+0.1158
+				#deltaj1 = 0.02825*j1r_E+0.4056
+				#deltaj2 = 0.02825*j2r_E+0.4056 
+				#deltaj1 = 0.04135*j1r_E+0.08789
+				#deltaj2 = 0.04135*j2r_E+0.08789
+				deltaj1 = 0.07113*j1r_E+0.5201
+				deltaj2 = 0.07113*j2r_E+0.5201
 				graphtest.Fill(j1r_E+deltaj1-j1t_E)
 				graphtest.Fill(j2r_E+deltaj2-j2t_E)
 				'''
