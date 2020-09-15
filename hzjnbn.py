@@ -32,8 +32,8 @@ def jetdisplay():
 		
 		#graphmass = TH1F("mass_jet", "mass_jet", 100, 0., 200.)
 		graphtest = TH1F("test", "test", 80, -40., 40.)
-		graphenergy = TH1F("energy", "energy", 60, 60., 120.)
-		graphenergytruth = TH1F("energytruth", "energytruth", 60, 60., 120.) 
+		graphenergy = TH1F("energy", "energy", 100, 60., 160.)
+		graphenergytruth = TH1F("energytruth", "energytruth", 100, 60., 160.) 
 		graphjs = TH1F("energyjs", "energyjs", 200, 0., 100.) 
 		graphjc = TH1F("energyjc", "energyjc", 200, 0., 100.) 
 		
