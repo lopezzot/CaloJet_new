@@ -121,18 +121,18 @@ def jetdisplay():
 			cut1 =  nmuon==0 and nneu==0
 			cut2 =  abs(j1t_eta)<2.0 and abs(j2t_eta)<2.0
 			cut3 = eleak<3000.
-			cut3 = True	
+			#cut3 = True	
 			cut4 = j1t_E+j2t_E>0.999*energies[counter]
-			cut4= True
-			#cut5 = abs(j1t_E-j2t_E)<5.
-			cut5 = abs(j1t_phi-j2t_phi)>0.1
+			#cut4= True
+			cut5 = abs(j1t_E-j2t_E)<5.
+			#cut5 = abs(j1t_phi-j2t_phi)>0.1
 			if cut1 and cut2 and cut3 and cut4 and cut5:
 				deltaj1 = 0.04406*j1r_E+0.1158
 				deltaj2 = 0.04406*j2r_E+0.1158
 				deltaj1 = 0.02825*j1r_E+0.4056
 				deltaj2 = 0.02825*j2r_E+0.4056 
-				deltaj1 = 0.04135*j1r_E+0.08789
-				deltaj2 = 0.04135*j2r_E+0.08789
+				#deltaj1 = 0.04135*j1r_E+0.08789
+				#deltaj2 = 0.04135*j2r_E+0.08789
 				graphtest.Fill(j1r_E+deltaj1-j1t_E)
 				graphtest.Fill(j2r_E+deltaj2-j2t_E)
 				'''
