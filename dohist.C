@@ -498,7 +498,7 @@ std::tuple<double, double, double> maptower(int index, string side){
 }
 fastjet::PseudoJet mergejet(fastjet::PseudoJet jet_scin, fastjet::PseudoJet jet_cher) {
 
-  double c=0.29;
+  double c=0.30;
 
   double jetPx = (jet_scin.px()-c*jet_cher.px())/(1-c);
   double jetPy = (jet_scin.py()-c*jet_cher.py())/(1-c);
