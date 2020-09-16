@@ -1,4 +1,4 @@
-from ROOT import TTree, TFile, TH1F, TGraph, TGraphErrors, gStyle, TLine, TF1, TLorentzVector
+from ROOT import TTree, TH2F, TFile, TH1F, TGraph, TGraphErrors, gStyle, TLine, TF1, TLorentzVector
 import glob
 from array import array
 import os
@@ -53,6 +53,8 @@ def jetdisplay():
 		graph_emcomp08 = TH1F("emcomp08_"+str(energies[counter]), "emcomp08"+str(energies[counter]), 80, -40, 40)
 		graph_emcomp1 = TH1F("emcomp1_"+str(energies[counter]), "emcomp1"+str(energies[counter]), 80, -40, 40)
 		
+
+		scatterplot = TH2F("diff_"+str(energies[counter]),"diff_"+str(energies[counter]), 70, -20., 50., 70, -50., 20)
 		#loop over events
 		for Event in range(tree.GetEntries()):		
 
@@ -124,12 +126,14 @@ def jetdisplay():
 
 			cut1 =  nmuon==0 and nneu==0
 			cut2 =  abs(j1t_eta)<2.0 and abs(j2t_eta)<2.0
-			cut3 = eleak<3000.
-			cut3 = True	
-			cut4 = j1t_E+j2t_E>0.999*energies[counter]
-			cut4= True
+			eleak = eleak*1000.
+			cut3 = eleak<0.015
+			#cut3 = True	
+			cut4 = j1s_E+j2s_E>0.66*energies[counter]
+			#cut4= True
 			#cut5 = abs(j1t_E-j2t_E)<5.
-			cut5 = abs(j1t_phi-j2t_phi)>0.1
+			#cut5 = abs(j1t_phi-j2t_phi)>0.1
+			cut5 = True
 			if cut1 and cut2 and cut3 and cut4 and cut5:
 				#deltaj1 = 0.04406*j1r_E+0.1158
 				#deltaj2 = 0.04406*j2r_E+0.1158
@@ -166,6 +170,7 @@ def jetdisplay():
 				graphjs.Fill(j1s_E)
 				graphjc.Fill(j2c_E)
 				graphjc.Fill(j1c_E)
+				scatterplot.Fill(j2r_E+deltaj2-j2t_E, j1r_E+deltaj1-j1t_E)
 
 		displayfile.cd()
 		graphtest.Write()
@@ -178,5 +183,6 @@ def jetdisplay():
 		#graph_emcomp06.Write()
 		#graph_emcomp08.Write()
 		#graph_emcomp1.Write()
+		scatterplot.Write()
 
 jetdisplay()
