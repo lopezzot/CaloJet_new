@@ -116,9 +116,10 @@ def jetdisplay():
 
 			cut1 =  nmuon==0 and nneu==0
 			cut2 =  abs(j1t_eta)<2.0 and abs(j2t_eta)<2.0
-			cut3 = eleak<3000.	
-			cut4 = j1t_E+j2t_E>85.0
-			
+			eleak = eleak*1000.
+			cut3 = eleak<1.0	
+			#cut4 = j1t_E+j2t_E>85.0
+			cut4 = True
 			if cut1 and cut2 and cut3 and cut4:
 				graphtest.Fill(j1r_E-j1t_E)
 				graphtest.Fill(j2r_E-j2t_E)

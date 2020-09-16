@@ -124,13 +124,14 @@ def jetdisplay():
 			j2c_phi = tree.j2c_phi	
 			
 			cut1 =  nmuon==1 and nneu==1
-			cut2 =  abs(j1t_phi-j2t_phi)>0.1
-			cut3 = enumu+j1t_E+j2t_E>162.45
-			cut4 = eleak/1000.-emu+muene_sci<5.
+			cut2 =  abs(j1t_eta)<2.0 and abs(j2t_eta)<2.0
+			#cut3 = enumu+j1t_E+j2t_E>162.45
+			cut3 = True
+			cut4 = eleak/1000.-emu+muene_sci<3.
 			cut5 = j1r_E+j2r_E>68.0
-			cut6 = muene_sci<4.0
+			cut5 = True
 			
-			if cut1 and cut2 and cut3 and cut4 and cut5 and cut6:
+			if cut1 and cut2 and cut3 and cut4 and cut5:
 				graphtest.Fill(j1r_E-j1t_E)
 				graphtest.Fill(j2r_E-j2t_E)
 				deltaj1 = 0.02175*j1r_E+0.0808
