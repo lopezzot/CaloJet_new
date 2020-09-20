@@ -117,7 +117,7 @@ def jetdisplay():
 			cut3 = eleak<0.1
 			#cut3 = True	
 			cut4 = j2s_E+j1s_E>cut[counter]
-			#cut4= True
+			cut4= True
 			#cut5 = abs(j1t_E-j2t_E)<5.
 			#cut5 = abs(j1t_phi-j2t_phi)>0.1
 			cut5 = True

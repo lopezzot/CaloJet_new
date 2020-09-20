@@ -59,7 +59,7 @@ def jetdisplay():
 		scatterplotedep = TH2F("edep_"+str(energies[counter]), "edep_"+str(energies[counter]), 100, 0.0, 100.0, 100, 0.0, 100.0)
 		#loop over events
 		for Event in range(tree.GetEntries()):		
-			print tree.GetEntries()
+			
 			tree.GetEntry(Event)	
 			#print "Event "+str(Event)
 			nmuon = tree.nmuon
@@ -132,7 +132,7 @@ def jetdisplay():
 			cut3 = eleak<0.1
 			#cut3 = True	
 			cut4 = j1s_E+j2s_E>cut[counter]
-			#cut4= True
+			cut4= True
 			#cut5 = abs(j1t_E-j2t_E)<5.
 			#cut5 = abs(j1t_phi-j2t_phi)>0.1
 			cut5 = True
