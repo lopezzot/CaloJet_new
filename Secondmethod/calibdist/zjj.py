@@ -10,6 +10,7 @@ def jetdisplay():
 	displayfile = TFile(outputfile+".root","RECREATE")
 
 	energies = [30,50,70,90, 150, 250]
+	cut = [16.72, 31.115, 55.548, 58.715, 99.335, 160.8]
 
 	#for geant4.10.5.p01 FTFPBERT
 	inputfiles = ["Results/noBnoX0/jetscan/jetscan_"+str(e)+".root" for e in energies]
@@ -41,6 +42,7 @@ def jetdisplay():
 		graph_emcomp1 = TH1F("emcomp1_"+str(energies[counter]), "emcomp1"+str(energies[counter]), 80, -40, 40)
 		
 		scatterplot = TH2F("diff_"+str(energies[counter]),"diff_"+str(energies[counter]), 70, -20., 50., 70, -50., 20)
+		scatterplotedep = TH2F("edep_"+str(energies[counter]), "edep_"+str(energies[counter]), 100, 0.0, 100.0, 100, 0.0, 100.0)
 		#loop over events
 		for Event in range(tree.GetEntries()):		
 
@@ -112,10 +114,9 @@ def jetdisplay():
 
 			cut1 =  nmuon==0 and nneu==0
 			cut2 =  abs(j1t_eta)<2.0 and abs(j2t_eta)<2.0
-			eleak = eleak*1000.
-			cut3 = eleak<0.015
+			cut3 = eleak<0.1
 			#cut3 = True	
-			cut4 = j2s_E+j1s_E>0.66*energies[counter]
+			cut4 = j2s_E+j1s_E>cut[counter]
 			#cut4= True
 			#cut5 = abs(j1t_E-j2t_E)<5.
 			#cut5 = abs(j1t_phi-j2t_phi)>0.1
@@ -129,8 +130,12 @@ def jetdisplay():
 				#deltaj2 = 0.04135*j2r_E+0.08789
 				#deltaj1 = 0.07113*j1r_E+0.5201
 				#deltaj2 = 0.07113*j2r_E+0.5201
-				deltaj1 = 0.07211*j1r_E+0.7122
-				deltaj2 = 0.07211*j2r_E+0.7122
+				#deltaj1 = 0.07211*j1r_E+0.7122
+				#deltaj2 = 0.07211*j2r_E+0.7122
+				#deltaj1 = 0.4272+0.07402*j1r_E-(0.00007572*(j1r_E**2.0))
+				#deltaj2 = 0.4272+0.07402*j2r_E-(0.00007572*(j2r_E**2.0))
+				deltaj1 = 0.0
+				deltaj2 = 0.0
 				graphtest.Fill(j1r_E+deltaj1-j1t_E)
 				graphtest.Fill(j2r_E+deltaj2-j2t_E)
 				'''
@@ -159,6 +164,8 @@ def jetdisplay():
 				graphjc.Fill(j2c_E)
 				graphjc.Fill(j1c_E)
 				scatterplot.Fill(j2r_E+deltaj2-j2t_E, j1r_E+deltaj1-j1t_E)
+				scatterplotedep.Fill(edep, j1s_E+j2s_E)
+
 
 		displayfile.cd()
 		graphtest.Write()
@@ -172,5 +179,6 @@ def jetdisplay():
 		#graph_emcomp08.Write()
 		#graph_emcomp1.Write()
 		scatterplot.Write()
+		scatterplotedep.Write()
 
 jetdisplay()
