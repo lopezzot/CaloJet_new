@@ -11,11 +11,23 @@ def jetdisplay():
 
 	energies = [30,50,70,90, 150, 250]
 	cut = [16.72, 31.115, 55.548, 58.715, 99.335, 160.8]
-
+	
 	#for geant4.10.5.p01 FTFPBERT
 	inputfiles = ["Results/noBnoX0/jetscan/jetscan_"+str(e)+".root" for e in energies]
 	#end geant4.10.5.p01 FTFPBERT
 
+	#for chi scan
+	inputfiles = ["Results/noBnoX0/chiscan/chi_0.5/jetscan_"+str(e)+".root" for e in energies]
+	#end chi scan
+
+	arrayenergies = array('d', [0.0]+[x/2. for x in energies])
+	arraydiffj1 = array('d')
+	arraydiffj2 = array('d')
+	arraydiffj1.append(0.0)
+	arraydiffj2.append(0.0)
+	arrayres = array('d')
+	arraysqrtenergies = array('d', [1./((x/2)**0.5) for x in energies])
+	
 	for counter, inputfile in enumerate(inputfiles):
 		inputfile = TFile(inputfile)
 		print "Analyzing: "+str(inputfile)+" \n"
@@ -30,11 +42,12 @@ def jetdisplay():
 		
 		#graphmass = TH1F("mass_jet", "mass_jet", 100, 0., 200.)
 		graphtest = TH1F("test"+str(energies[counter]), "test"+str(energies[counter]), 80, -40., 40.)
+		graphtest2 = TH1F("test2"+str(energies[counter]), "test2"+str(energies[counter]), 80, -40., 40.)
 		graphenergy = TH1F("energy"+str(energies[counter]), "energy"+str(energies[counter]), 200, 0., 100.)
 		graphenergytruth = TH1F("energytruth"+str(energies[counter]), "energytruth"+str(energies[counter]), 200, 0., 100.) 
 		graphjs = TH1F("energyjs"+str(energies[counter]), "energyjs"+str(energies[counter]), 200, 0., 100.) 
 		graphjc = TH1F("energyjc"+str(energies[counter]), "energyjc"+str(energies[counter]), 200, 0., 100.) 
-			
+		histresolution = TH1F("res_"+str(energies[counter]), "res_"+str(energies[counter]), 100, -1., 1.)	
 		graph_emcomp02 = TH1F("emcomp02_"+str(energies[counter]), "emcomp02"+str(energies[counter]), 80, -40, 40)
 		graph_emcomp04 = TH1F("emcomp04_"+str(energies[counter]), "emcomp04"+str(energies[counter]), 80, -40, 40)
 		graph_emcomp06 = TH1F("emcomp06_"+str(energies[counter]), "emcomp06"+str(energies[counter]), 80, -40, 40)
@@ -43,6 +56,9 @@ def jetdisplay():
 		
 		scatterplot = TH2F("diff_"+str(energies[counter]),"diff_"+str(energies[counter]), 70, -20., 50., 70, -50., 20)
 		scatterplotedep = TH2F("edep_"+str(energies[counter]), "edep_"+str(energies[counter]), 100, 0.0, 100.0, 100, 0.0, 100.0)
+		
+
+
 		#loop over events
 		for Event in range(tree.GetEntries()):		
 
@@ -117,7 +133,7 @@ def jetdisplay():
 			cut3 = eleak<0.1
 			#cut3 = True	
 			cut4 = j2s_E+j1s_E>cut[counter]
-			cut4= True
+			#cut4= True
 			#cut5 = abs(j1t_E-j2t_E)<5.
 			#cut5 = abs(j1t_phi-j2t_phi)>0.1
 			cut5 = True
@@ -137,7 +153,9 @@ def jetdisplay():
 				deltaj1 = 0.0
 				deltaj2 = 0.0
 				graphtest.Fill(j1r_E+deltaj1-j1t_E)
-				graphtest.Fill(j2r_E+deltaj2-j2t_E)
+				graphtest2.Fill(j2r_E+deltaj2-j2t_E)
+				histresolution.Fill((j1r_E+deltaj1-j1t_E)/j1t_E)
+				histresolution.Fill((j2r_E+deltaj2-j2t_E)/j2t_E)
 				'''
 				if (emcomp1+emcomp2)<0.2*90.:
 					graph_emcomp02.Fill(j1r_E+deltaj1-j1t_E)
@@ -155,6 +173,12 @@ def jetdisplay():
 					graph_emcomp1.Fill(j1r_E+deltaj1-j1t_E)
 					graph_emcomp1.Fill(j2r_E+deltaj2-j2t_E)				
 				'''
+				'''
+				a = np.sin(j1r_theta*180./math.pi)**2.+np.sin(j2r_theta*180./math.pi)**2.
+				b = -2.*float(energies[counter])*np.sin(j2r_theta*180./math.pi)**2
+				c = -(j1r_m**2.)*np.sin(j1r_theta*180./math.pi)**2.+(float(energies[counter])**2.)*np.sin(j2r_theta*180./math.pi)**2.-(j2r_m**2.)*np.sin(j2r_theta*180./math.pi)**2.
+				delta = (b**2.-4.*a*c)
+				'''
 				graphenergy.Fill(j1r_E+deltaj1)
 				graphenergy.Fill(j2r_E+deltaj2)
 				graphenergytruth.Fill(j1t_E)
@@ -166,7 +190,14 @@ def jetdisplay():
 				scatterplot.Fill(j2r_E+deltaj2-j2t_E, j1r_E+deltaj1-j1t_E)
 				scatterplotedep.Fill(edep, j1s_E+j2s_E)
 
-
+		graphtest.Fit("gaus")
+		arraydiffj1.append(graphtest.GetFunction("gaus").GetParameter(1))
+		graphtest2.Fit("gaus")
+		arraydiffj2.append(graphtest2.GetFunction("gaus").GetParameter(1))
+		histresolution.Fit("gaus")
+		arrayres.append(histresolution.GetFunction("gaus").GetParameter(2))
+		histresolution.GetXaxis().SetTitle("E_{j}^{r} - E_{j}^{t}")
+		histresolution.GetYaxis().SetTitle("Events")
 		displayfile.cd()
 		graphtest.Write()
 		graphenergy.Write()
@@ -180,5 +211,21 @@ def jetdisplay():
 		#graph_emcomp1.Write()
 		scatterplot.Write()
 		scatterplotedep.Write()
+		histresolution.Write()
+	graphres = TGraph(len(arraysqrtenergies), arraysqrtenergies, arrayres)
+	graphres.GetXaxis().SetTitle("1/\sqrt{E_{j}^{norm} (GeV)}}")
+	graphres.GetYaxis().SetTitle("\sigma((E_{j}^{r} - E_{j}^{t})/E_{j}^{t})")
+	#graphres.GetYaxis().SetRangeUser(0.0,0.12)
+	#graphres.GetXaxis().SetRangeUser(0.0,0.28)
+	graph = TGraph(len(arraydiffj1), arrayenergies, arraydiffj1)
+	graph.GetXaxis().SetTitle("E_{nom}")
+	graph.GetYaxis().SetTitle("E_{j1}^{r}-E_{j1}^{t}")
+	graph2 = TGraph(len(arraydiffj2), arrayenergies, arraydiffj2)
+	graph2.GetXaxis().SetTitle("E_{nom}")
+	graph2.GetYaxis().SetTitle("E_{j2}^{r}-E_{j2}^{t}")
+	print arrayenergies, arraydiffj1
+	graph.Write()
+	graph2.Write()
+	graphres.Write()
 
 jetdisplay()
