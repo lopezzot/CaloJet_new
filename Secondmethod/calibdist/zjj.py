@@ -17,14 +17,12 @@ def jetdisplay():
 	#end geant4.10.5.p01 FTFPBERT
 
 	#for chi scan
-	inputfiles = ["Results/noBnoX0/chiscan/chi_0.5/jetscan_"+str(e)+".root" for e in energies]
+	inputfiles = ["Results/noBnoX0/chiscan/chi_0.2/jetscan_"+str(e)+".root" for e in energies]
 	#end chi scan
 
-	arrayenergies = array('d', [0.0]+[x/2. for x in energies])
+	arrayenergies = array('d', [x/2. for x in energies])
 	arraydiffj1 = array('d')
 	arraydiffj2 = array('d')
-	arraydiffj1.append(0.0)
-	arraydiffj2.append(0.0)
 	arrayres = array('d')
 	arraysqrtenergies = array('d', [1./((x/2)**0.5) for x in energies])
 	
@@ -42,7 +40,7 @@ def jetdisplay():
 		
 		#graphmass = TH1F("mass_jet", "mass_jet", 100, 0., 200.)
 		graphtest = TH1F("test"+str(energies[counter]), "test"+str(energies[counter]), 80, -40., 40.)
-		graphtest2 = TH1F("test2"+str(energies[counter]), "test2"+str(energies[counter]), 80, -40., 40.)
+		graphtest2 = TH1F("test2_"+str(energies[counter]), "test2"+str(energies[counter]), 80, -40., 40.)
 		graphenergy = TH1F("energy"+str(energies[counter]), "energy"+str(energies[counter]), 200, 0., 100.)
 		graphenergytruth = TH1F("energytruth"+str(energies[counter]), "energytruth"+str(energies[counter]), 200, 0., 100.) 
 		graphjs = TH1F("energyjs"+str(energies[counter]), "energyjs"+str(energies[counter]), 200, 0., 100.) 
@@ -200,6 +198,7 @@ def jetdisplay():
 		histresolution.GetYaxis().SetTitle("Events")
 		displayfile.cd()
 		graphtest.Write()
+		graphtest2.Write()
 		graphenergy.Write()
 		graphenergytruth.Write()
 		graphjs.Write()
@@ -218,6 +217,7 @@ def jetdisplay():
 	#graphres.GetYaxis().SetRangeUser(0.0,0.12)
 	#graphres.GetXaxis().SetRangeUser(0.0,0.28)
 	graph = TGraph(len(arraydiffj1), arrayenergies, arraydiffj1)
+	graph.Fit("pol2","","",10.,125.)
 	graph.GetXaxis().SetTitle("E_{nom}")
 	graph.GetYaxis().SetTitle("E_{j1}^{r}-E_{j1}^{t}")
 	graph2 = TGraph(len(arraydiffj2), arrayenergies, arraydiffj2)
