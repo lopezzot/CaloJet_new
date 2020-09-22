@@ -10,7 +10,7 @@ def jetdisplay():
 	displayfile = TFile(outputfile+".root","RECREATE")
 
 	energies = [30,50,70,90, 150, 250]
-	cut = [16.72, 31.115, 55.548, 58.715, 99.335, 160.8]
+	cut = [16.72, 31.115, 55.548, 58.715, 105.335, 180.8]
 	
 	#for geant4.10.5.p01 FTFPBERT
 	inputfiles = ["Results/noBnoX0/jetscan/jetscan_"+str(e)+".root" for e in energies]
