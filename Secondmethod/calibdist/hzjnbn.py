@@ -11,7 +11,7 @@ def jetdisplay():
 
 
 	#for geant4.10.5 FTFPBERT
-	inputfiles = ["Results/noBnoX0/2j/hzjnbn.root"]
+	inputfiles = ["Results/noBnoX0/2j_0.43/hzjnbn_0.43.root"]
 	#end geant4.10.5 FTFPBERT
 
 	for counter, inputfile in enumerate(inputfiles):
@@ -32,7 +32,7 @@ def jetdisplay():
 		graphenergytruth = TH1F("energytruth", "energytruth", 100, 60., 160.) 
 		graphjs = TH1F("energyjs", "energyjs", 200, 0., 100.) 
 		graphjc = TH1F("energyjc", "energyjc", 200, 0., 100.) 
-		
+		diff = TH1F("diffmass","diffmass", 250, -25.,25.)
 		#loop over events
 		for Event in range(tree.GetEntries()):		
 
@@ -80,12 +80,12 @@ def jetdisplay():
 			#deltaj1 = 0.04135*j1r_E+0.08789
 			deltaj1 = 0.07113*j1r_E+0.5201
 			j1 = TLorentzVector()
-			j1.SetPtEtaPhiE(j1r_pt+deltaj1*np.sin(j1r_theta), j1r_eta, j1r_phi, j1r_E+deltaj1)
+			j1.SetPtEtaPhiE(j1r_pt, j1r_eta, j1r_phi, j1r_E)
 			#deltaj2 = 0.04406*j2r_E+0.1158
 			#deltaj2 = 0.04135*j2r_E+0.08789
 			deltaj2 = 0.07113*j2r_E+0.5201
 			j2 = TLorentzVector()
-			j2.SetPtEtaPhiE(j2r_pt+deltaj2*np.sin(j2r_theta), j2r_eta, j2r_phi, j2r_E+deltaj2)
+			j2.SetPtEtaPhiE(j2r_pt, j2r_eta, j2r_phi, j2r_E)
 			newmass = (j1+j2).M()
 
 			j1s_E = tree.j1s_E
@@ -116,7 +116,7 @@ def jetdisplay():
 
 			cut1 =  nmuon==0 and nneu==0
 			cut2 =  abs(j1t_eta)<2.0 and abs(j2t_eta)<2.0
-			eleak = eleak*1000.
+			#eleak = eleak*1000.
 			cut3 = eleak<1.0	
 			#cut4 = j1t_E+j2t_E>85.0
 			cut4 = True
@@ -134,6 +134,7 @@ def jetdisplay():
 				graphjs.Fill(j1s_E)
 				graphjc.Fill(j2c_E)
 				graphjc.Fill(j1c_E)
+				diff.Fill(newmass-mjjt)
 
 		displayfile.cd()
 		#graphtest.Write()
@@ -143,5 +144,6 @@ def jetdisplay():
 		graphenergytruth.Write()
 		#graphjs.Write()
 		#graphjc.Write()
+		diff.Write()
 
 jetdisplay()
