@@ -9,15 +9,15 @@ def jetdisplay():
 	outputfile = "zjj"
 	displayfile = TFile(outputfile+".root","RECREATE")
 
-	energies = [30,50,70,90, 150, 250]
-	cut = [16.72, 31.115, 55.548, 58.715, 105.335, 180.8]
+	energies = [30,50,90, 150, 250]
+	cut = [16.72, 31.115, 58.715, 105.335, 180.8]
 	
 	#for geant4.10.5.p01 FTFPBERT
 	inputfiles = ["Results/noBnoX0/jetscan/jetscan_"+str(e)+".root" for e in energies]
 	#end geant4.10.5.p01 FTFPBERT
 
 	#for chi scan
-	inputfiles = ["Results/noBnoX0/chiscan/chi_0.2/jetscan_"+str(e)+".root" for e in energies]
+	inputfiles = ["Results/noBnoX0/chiscan/chi_0.5/jetscan_"+str(e)+".root" for e in energies]
 	#end chi scan
 
 	arrayenergies = array('d', [x/2. for x in energies])
@@ -151,6 +151,7 @@ def jetdisplay():
 				deltaj1 = 0.0
 				deltaj2 = 0.0
 				graphtest.Fill(j1r_E+deltaj1-j1t_E)
+				graphtest.Fill(j2r_E+deltaj2-j2t_E)
 				graphtest2.Fill(j2r_E+deltaj2-j2t_E)
 				histresolution.Fill((j1r_E+deltaj1-j1t_E)/j1t_E)
 				histresolution.Fill((j2r_E+deltaj2-j2t_E)/j2t_E)
