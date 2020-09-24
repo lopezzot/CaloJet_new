@@ -11,7 +11,7 @@ def jetdisplay():
 
 
 	#for geant4.10.5 FTFPBERT
-	inputfiles = ["Results/noBnoX0/2j_0.43/hzjnbn_0.43.root"]
+	inputfiles = ["Results/noBnoX0/2j_0.445/hzjnbn_0.445.root"]
 	#end geant4.10.5 FTFPBERT
 
 	for counter, inputfile in enumerate(inputfiles):

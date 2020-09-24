@@ -10,7 +10,7 @@ def jetdisplay():
 	displayfile = TFile(outputfile+".root","RECREATE")
 
 	#for geant4.10.5 FTFPBERT
-	inputfiles = ["Results/noBnoX0/2j_0.43/wwjl_0.43.root"]
+	inputfiles = ["Results/noBnoX0/2j_0.445/wwjl_0.445.root"]
 	#end geant4.10.5 FTFPBERT
 
 	for counter, inputfile in enumerate(inputfiles):
